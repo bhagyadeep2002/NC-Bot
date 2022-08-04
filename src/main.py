@@ -10,6 +10,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram.ext import CallbackContext
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
+from commands.weather import get_weather
 load_dotenv()
 
 updater = Updater(token=os.environ["TG_BOT"])
@@ -19,17 +20,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="bot will be abandoned because of lack of confidence")
 
-def get_weather(update: Update, context: CallbackContext):
-    cityname = context.args[0]
-    api_string = f'https://api.openweathermap.org/data/2.5/weather?q={cityname}&appid={os.environ["WEATHER_API"]}&units=metric'
-    r = requests.get(api_string)
-    data = r.json()
-    cityname = cityname.capitalize()
-    curr_weather = f"<b> 🌎 {cityname} </b> \n\n"
-    curr_weather += f"<b> 🌡 Temperature: </b> {data['main']['temp']}°C \n"
-    curr_weather += f"<b> 😶‍🌫️ Feels like: </b> {data['main']['feels_like']}°C \n"
-    curr_weather += f"<b> 💨 Wind Speed: </b> {data['wind']['speed']} m/s\n"
-    update.message.reply_text(text=curr_weather, parse_mode=ParseMode.HTML)
+
 
 def unknown(update: Update, context: CallbackContext):
     update.message.reply_text(text="Sorry I did not recognise that command")
