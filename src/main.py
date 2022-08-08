@@ -14,6 +14,7 @@ from commands.weather import get_weather
 from commands.animals import getCat
 from commands.animals import getDog
 from commands.animals import getHamster
+from commands.crypto_prices import getPrice
 load_dotenv()
 
 updater = Updater(token=os.environ["TG_BOT"])
@@ -28,6 +29,7 @@ def start(update: Update, context: CallbackContext):
 def unknown(update: Update, context: CallbackContext):
     update.message.reply_text(text="Sorry I did not recognise that command")
 
+crypto_handler = CommandHandler('crypto', getPrice)
 cat_handler = CommandHandler('cat',getCat)
 hamster_handler = CommandHandler('hamster',getHamster)
 dog_handler = CommandHandler('dog',getDog)
@@ -35,6 +37,7 @@ weather_handler = CommandHandler('weather',get_weather)
 start_handler = CommandHandler('start',start)
 unknown_handler = MessageHandler(Filters.command, unknown)
 
+dispatcher.add_handler(crypto_handler)
 dispatcher.add_handler(hamster_handler)
 dispatcher.add_handler(dog_handler)
 dispatcher.add_handler(cat_handler)
